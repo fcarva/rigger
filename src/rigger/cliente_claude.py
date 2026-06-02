@@ -18,6 +18,21 @@ from .prompts import PERSONA
 T = TypeVar("T", bound=BaseModel)
 
 
+def _erro_amigavel(erro: Exception) -> RuntimeError:
+    """Traduz erros comuns da API em mensagens claras em português."""
+    mensagem = str(getattr(erro, "message", "")) or str(erro)
+    if "credit balance is too low" in mensagem or "Plans & Billing" in mensagem:
+        return RuntimeError(
+            "Saldo de créditos insuficiente na conta Anthropic. "
+            "Adicione créditos em https://console.anthropic.com/settings/billing e tente novamente."
+        )
+    if isinstance(erro, anthropic.AuthenticationError):
+        return RuntimeError("Chave da API inválida. Confira ANTHROPIC_API_KEY no arquivo .env.")
+    if isinstance(erro, anthropic.RateLimitError):
+        return RuntimeError("Limite de requisições atingido. Aguarde alguns instantes e tente de novo.")
+    return RuntimeError(f"Erro na API da Anthropic: {mensagem}")
+
+
 class ClienteClaude:
     """Encapsula as chamadas à API da Anthropic para o agente."""
 
@@ -58,13 +73,16 @@ class ClienteClaude:
             f"# Pedido\n\n{tarefa}"
         )
 
-        resposta = self._client.messages.parse(
-            model=self.config.modelo,
-            max_tokens=max_tokens,
-            system=system,
-            messages=[{"role": "user", "content": conteudo_usuario}],
-            output_format=modelo_saida,
-        )
+        try:
+            resposta = self._client.messages.parse(
+                model=self.config.modelo,
+                max_tokens=max_tokens,
+                system=system,
+                messages=[{"role": "user", "content": conteudo_usuario}],
+                output_format=modelo_saida,
+            )
+        except anthropic.APIError as erro:
+            raise _erro_amigavel(erro) from erro
 
         if resposta.parsed_output is None:
             motivo = resposta.stop_reason
@@ -96,10 +114,13 @@ class ClienteClaude:
             )
         conteudo.append({"type": "text", "text": instrucao})
 
-        resposta = self._client.messages.create(
-            model=self.config.modelo,
-            max_tokens=max_tokens,
-            system=PERSONA,
-            messages=[{"role": "user", "content": conteudo}],
-        )
+        try:
+            resposta = self._client.messages.create(
+                model=self.config.modelo,
+                max_tokens=max_tokens,
+                system=PERSONA,
+                messages=[{"role": "user", "content": conteudo}],
+            )
+        except anthropic.APIError as erro:
+            raise _erro_amigavel(erro) from erro
         return "".join(bloco.text for bloco in resposta.content if bloco.type == "text")

@@ -9,7 +9,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Carrega variáveis de um arquivo .env, se existir.
-load_dotenv()
+# override=True: o .env tem prioridade sobre variáveis de ambiente já definidas
+# (inclusive uma ANTHROPIC_API_KEY vazia herdada do shell), que é o que o usuário espera.
+load_dotenv(override=True)
 
 # Raiz do projeto = duas pastas acima de src/rigger/config.py
 RAIZ_PROJETO = Path(__file__).resolve().parents[2]
@@ -19,7 +21,9 @@ RAIZ_PROJETO = Path(__file__).resolve().parents[2]
 class Config:
     """Reúne as configurações usadas pelo agente."""
 
-    api_key: str | None = field(default_factory=lambda: os.getenv("ANTHROPIC_API_KEY"))
+    api_key: str | None = field(
+        default_factory=lambda: (os.getenv("ANTHROPIC_API_KEY") or "").strip() or None
+    )
     modelo: str = field(default_factory=lambda: os.getenv("RIGGER_MODELO", "claude-opus-4-8"))
 
     raiz: Path = RAIZ_PROJETO
