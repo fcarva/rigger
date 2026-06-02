@@ -79,7 +79,7 @@ Opções úteis:
 rigger/
 ├── base_conhecimento/        # entrada: material de curso + normas
 │   ├── cursos/
-│   └── normas/icamento_carga.md
+│   └── normas/              # um arquivo por NR/ABNT + índice (README)
 ├── src/rigger/
 │   ├── config.py             # chave de API, modelo, caminhos
 │   ├── modelos.py            # esquemas Pydantic (treinamento, APR)
@@ -99,8 +99,9 @@ rigger/
 - [x] Ingestão de `.md/.txt/.pdf/.docx/.pptx` (texto, incluindo grupos e tabelas)
 - [x] Leitura por **visão** de materiais só com imagens (comando `transcrever`)
 - [x] Plano de içamento (rigging plan) e checklist de inspeção de acessórios
+- [x] Base de normas estruturada (um resumo de referência por NR/ABNT)
 - [ ] Geração de avaliação/prova com gabarito
-- [ ] Importar normas oficiais completas para a base
+- [ ] Expandir os resumos de normas (detalhar pontos e critérios por norma)
 
 ## Aviso
 
