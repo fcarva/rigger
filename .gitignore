@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Ambiente / segredos
+.env
+*.local
+
+# Saídas geradas pelo agente
+saidas/*
+!saidas/.gitkeep
+
+# Materiais brutos de curso (podem ser grandes / com direitos autorais de terceiros).
+# Por padrão NÃO são versionados — ficam só localmente como insumo do agente.
+# Para versionar um material específico, use: git add -f base_conhecimento/cursos/arquivo
+base_conhecimento/cursos/*
+!base_conhecimento/cursos/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
