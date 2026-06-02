@@ -46,6 +46,15 @@ rigger treinamento --tema "Operação segura de guindaste móvel"
 
 # Apreciação de risco (gera um .docx)
 rigger apreciacao --atividade "Içamento de viga metálica com guindaste de 50 t" --local "Obra X"
+
+# Plano de içamento / rigging plan (gera um .docx)
+rigger plano --operacao "Içamento de transformador de 12 t" --obra "Subestação Y"
+
+# Checklist de inspeção de acessório (gera um .docx)
+rigger checklist --acessorio "cabo de aço"
+
+# Transcrever uma apostila só de imagens (gera um .md reutilizável via visão)
+rigger transcrever -m "base_conhecimento/cursos/apostila.pptx"
 ```
 
 Opções úteis:
@@ -56,8 +65,13 @@ Opções úteis:
 | `treinamento`  | `--material`  | Arquivo/pasta de material. Padrão: `cursos/`.        |
 | `treinamento`  | `--publico`   | Público-alvo.                                        |
 | `apreciacao`   | `--atividade` | Atividade analisada (obrigatório).                   |
-| `apreciacao`   | `--material`  | Material de apoio (opcional).                        |
-| ambos          | `--saida`     | Caminho do arquivo de saída.                         |
+| `plano`        | `--operacao`  | Operação a planejar (obrigatório).                   |
+| `plano`        | `--obra`      | Obra/local.                                          |
+| `checklist`    | `--acessorio` | Acessório a inspecionar (obrigatório).               |
+| `transcrever`  | `--material`  | PPTX de slides-imagem (obrigatório).                 |
+| `transcrever`  | `--lote`      | Slides por chamada à API (padrão 6).                 |
+| todos          | `--material`  | Material de apoio (opcional, exceto onde obrigatório).|
+| todos          | `--saida`     | Caminho do arquivo de saída.                         |
 
 ## Estrutura do projeto
 
@@ -82,9 +96,9 @@ rigger/
 
 - [x] Treinamento → PPTX
 - [x] Apreciação de risco → Word
-- [x] Ingestão de `.md/.txt/.pdf/.docx/.pptx` (texto)
-- [ ] Leitura por **visão/OCR** de materiais só com imagens (ex.: apostilas escaneadas)
-- [ ] Plano de içamento (rigging plan) e checklist de inspeção de acessórios
+- [x] Ingestão de `.md/.txt/.pdf/.docx/.pptx` (texto, incluindo grupos e tabelas)
+- [x] Leitura por **visão** de materiais só com imagens (comando `transcrever`)
+- [x] Plano de içamento (rigging plan) e checklist de inspeção de acessórios
 - [ ] Geração de avaliação/prova com gabarito
 - [ ] Importar normas oficiais completas para a base
 

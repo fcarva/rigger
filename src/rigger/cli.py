@@ -89,5 +89,48 @@ def apreciacao(
     typer.secho(f"Arquivo: {caminho}", fg=typer.colors.GREEN)
 
 
+@app.command()
+def plano(
+    operacao: str = typer.Option(..., "--operacao", "-op", help="Operação de içamento a planejar."),
+    material: Optional[Path] = typer.Option(
+        None, "--material", "-m", help="Arquivo ou pasta de material de apoio (opcional)."
+    ),
+    obra: str = typer.Option("", "--obra", help="Obra/local da operação."),
+    saida: Optional[Path] = typer.Option(None, "--saida", "-o", help="Caminho do .docx de saída."),
+) -> None:
+    """Gera um plano de içamento (rigging plan) em .docx."""
+    from .geradores.plano import gerar_plano
+
+    config = Config()
+    typer.echo(f"Gerando plano de içamento para: {operacao} ...")
+    plano_modelo, caminho = gerar_plano(
+        operacao=operacao, material=material, obra=obra, saida=saida, config=config
+    )
+    typer.secho(
+        f"OK: {len(plano_modelo.acessorios)} acessório(s), "
+        f"{len(plano_modelo.sequencia_operacao)} passo(s).",
+        fg=typer.colors.GREEN,
+    )
+    typer.secho(f"Arquivo: {caminho}", fg=typer.colors.GREEN)
+
+
+@app.command()
+def checklist(
+    acessorio: str = typer.Option(..., "--acessorio", "-ac", help="Acessório a inspecionar (ex.: cabo de aço)."),
+    material: Optional[Path] = typer.Option(
+        None, "--material", "-m", help="Arquivo ou pasta de material de apoio (opcional)."
+    ),
+    saida: Optional[Path] = typer.Option(None, "--saida", "-o", help="Caminho do .docx de saída."),
+) -> None:
+    """Gera um checklist de inspeção de acessório em .docx."""
+    from .geradores.checklist import gerar_checklist
+
+    config = Config()
+    typer.echo(f"Gerando checklist de inspeção para: {acessorio} ...")
+    check, caminho = gerar_checklist(acessorio=acessorio, material=material, saida=saida, config=config)
+    typer.secho(f"OK: {len(check.itens)} ponto(s) de inspeção.", fg=typer.colors.GREEN)
+    typer.secho(f"Arquivo: {caminho}", fg=typer.colors.GREEN)
+
+
 if __name__ == "__main__":
     app()

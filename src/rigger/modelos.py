@@ -104,3 +104,74 @@ class ApreciacaoRisco(BaseModel):
     normas_referencia: list[str]
     itens: list[ItemRisco]
     recomendacoes_gerais: list[str] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Plano de içamento (rigging plan)
+# ---------------------------------------------------------------------------
+
+
+class Acessorio(BaseModel):
+    """Um acessório de içamento usado no plano (cinta, cabo, manilha, etc.)."""
+
+    tipo: str = Field(description="Tipo do acessório (cinta têxtil, cabo de aço, manilha, gancho, balancim).")
+    capacidade: str = Field(description="Capacidade de carga / WLL (ex.: '5 t').")
+    quantidade: str = Field(default="", description="Quantidade utilizada.")
+    observacao: str = Field(default="", description="Observações (ângulo, comprimento, proteção de quina).")
+
+
+class Responsavel(BaseModel):
+    """Função e atribuição de um responsável na operação."""
+
+    funcao: str = Field(description="Função (operador, sinaleiro, amarrador, supervisor, resp. técnico).")
+    atribuicao: str = Field(description="Atribuição/responsabilidade na operação.")
+
+
+class PlanoIcamento(BaseModel):
+    """Plano de içamento (rigging plan) de uma operação."""
+
+    obra: str = Field(default="", description="Obra/cliente/local.")
+    descricao_carga: str = Field(description="Descrição da carga a ser içada.")
+    peso_carga: str = Field(description="Peso da carga (ex.: '12 t').")
+    dimensoes_carga: str = Field(default="", description="Dimensões aproximadas da carga.")
+    centro_gravidade: str = Field(default="", description="Considerações sobre o centro de gravidade.")
+    equipamento: str = Field(description="Equipamento de içamento (tipo/modelo do guindaste).")
+    capacidade_equipamento: str = Field(default="", description="Capacidade nominal do equipamento.")
+    raio_operacao: str = Field(default="", description="Raio de operação previsto.")
+    comprimento_lanca: str = Field(default="", description="Comprimento de lança previsto.")
+    percentual_utilizacao: str = Field(
+        default="", description="Percentual de utilização da tabela de carga (ex.: '75%')."
+    )
+    acessorios: list[Acessorio] = Field(description="Acessórios de içamento previstos.")
+    sequencia_operacao: list[str] = Field(description="Passo a passo da operação, em ordem.")
+    riscos_criticos: list[str] = Field(description="Riscos críticos da operação.")
+    criterios_seguranca: list[str] = Field(
+        description="Critérios/limites de segurança (vento máx., isolamento, solo, redes elétricas)."
+    )
+    responsaveis: list[Responsavel] = Field(default_factory=list)
+    normas_referencia: list[str]
+
+
+# ---------------------------------------------------------------------------
+# Checklist de inspeção de acessórios
+# ---------------------------------------------------------------------------
+
+
+class ItemChecklist(BaseModel):
+    """Um item a verificar na inspeção de um acessório."""
+
+    item: str = Field(description="O que verificar (ponto de inspeção).")
+    criterio: str = Field(description="Critério de aprovação/rejeição.")
+    referencia: str = Field(default="", description="Norma/cláusula de referência, se houver.")
+
+
+class ChecklistInspecao(BaseModel):
+    """Checklist de inspeção de um acessório de içamento."""
+
+    acessorio: str = Field(description="Acessório inspecionado (ex.: cabo de aço, cinta têxtil, manilha).")
+    periodicidade: str = Field(default="", description="Quando inspecionar (pré-uso, periódica, etc.).")
+    itens: list[ItemChecklist] = Field(description="Pontos de inspeção.")
+    criterios_descarte: list[str] = Field(
+        default_factory=list, description="Critérios objetivos de descarte do acessório."
+    )
+    normas_referencia: list[str]

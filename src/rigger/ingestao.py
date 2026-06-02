@@ -25,17 +25,47 @@ def _ler_docx(caminho: Path) -> str:
     return "\n".join(paragrafo.text for paragrafo in documento.paragraphs)
 
 
+def _texto_de_forma(forma) -> list[str]:
+    """Extrai texto de uma forma do slide, recursivamente.
+
+    Cobre caixas de texto, placeholders, tabelas e grupos (que contêm outras formas).
+    """
+    from pptx.enum.shapes import MSO_SHAPE_TYPE
+
+    textos: list[str] = []
+
+    # Grupos: percorre as formas-filhas.
+    if forma.shape_type == MSO_SHAPE_TYPE.GROUP:
+        for filha in forma.shapes:
+            textos.extend(_texto_de_forma(filha))
+        return textos
+
+    # Tabelas: lê célula a célula, linha por linha.
+    if forma.has_table:
+        for linha in forma.table.rows:
+            celulas = [celula.text.strip() for celula in linha.cells]
+            if any(celulas):
+                textos.append(" | ".join(celulas))
+        return textos
+
+    # Caixas de texto / placeholders.
+    if forma.has_text_frame:
+        conteudo = forma.text_frame.text.strip()
+        if conteudo:
+            textos.append(conteudo)
+
+    return textos
+
+
 def _ler_pptx(caminho: Path) -> str:
     from pptx import Presentation
 
     apresentacao = Presentation(str(caminho))
     partes: list[str] = []
     for numero, slide in enumerate(apresentacao.slides, start=1):
-        textos = [
-            forma.text_frame.text.strip()
-            for forma in slide.shapes
-            if forma.has_text_frame and forma.text_frame.text.strip()
-        ]
+        textos: list[str] = []
+        for forma in slide.shapes:
+            textos.extend(_texto_de_forma(forma))
         # Notas do apresentador, quando houver.
         if slide.has_notes_slide:
             nota = slide.notes_slide.notes_text_frame.text.strip()

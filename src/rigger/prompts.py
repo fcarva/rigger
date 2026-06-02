@@ -61,3 +61,38 @@ depois controles de engenharia, depois administrativos e, por último, EPI.
 - Considere fatores como vento, condição do solo, redes elétricas próximas, centro de \
 gravidade, tabela de carga, ângulo de lingada e estado dos acessórios.
 """
+
+# Instrução específica para gerar plano de içamento (rigging plan).
+INSTRUCOES_PLANO = """\
+Sua tarefa é elaborar um PLANO DE IÇAMENTO (rigging plan) para a operação descrita.
+
+Diretrizes:
+- Caracterize a carga (descrição, peso, dimensões, centro de gravidade).
+- Defina o equipamento (tipo/modelo do guindaste), capacidade, raio de operação, \
+comprimento de lança e o percentual de utilização da tabela de carga.
+- Liste os acessórios de içamento (cintas, cabos, manilhas, balancins) com capacidade \
+(WLL), quantidade e observações (ângulo de lingada, proteção de quina).
+- Descreva a sequência da operação passo a passo, em ordem.
+- Aponte os riscos críticos e os critérios/limites de segurança (vento máximo, \
+isolamento da área, condição do solo/patolamento, distância de redes elétricas).
+- Defina responsáveis e suas atribuições (operador, sinaleiro, amarrador, supervisão, \
+responsável técnico).
+- Cite as NRs e ABNT pertinentes em `normas_referencia`.
+- Quando o material não fornecer um dado (ex.: peso exato), use uma estimativa \
+claramente identificada como tal e recomende confirmação em campo.
+"""
+
+# Instrução específica para gerar checklist de inspeção de acessórios.
+INSTRUCOES_CHECKLIST = """\
+Sua tarefa é elaborar um CHECKLIST DE INSPEÇÃO para o acessório de içamento indicado.
+
+Diretrizes:
+- Liste os pontos de inspeção relevantes ao acessório (ex.: para cabo de aço: \
+rompimento de pernas, corrosão, amassamento, gaiola de passarinho, lubrificação).
+- Para cada item, defina um critério objetivo de aprovação/rejeição.
+- Inclua critérios de descarte conforme as normas (ABNT NBR ISO 4309 para cabos de aço; \
+ABNT NBR 15637 para acessórios; recomendações do fabricante).
+- Informe a periodicidade (inspeção pré-uso e periódica).
+- Cite as normas de referência. Não invente limites numéricos; quando não tiver certeza \
+do valor normativo, descreva o critério qualitativamente e indique consultar a norma.
+"""
