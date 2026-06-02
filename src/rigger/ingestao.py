@@ -1,13 +1,13 @@
 """Leitura de materiais de curso e normas da base de conhecimento.
 
-Formatos suportados: .md, .txt, .pdf, .docx
+Formatos suportados: .md, .txt, .pdf, .docx, .pptx
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-EXTENSOES_SUPORTADAS = {".md", ".txt", ".pdf", ".docx"}
+EXTENSOES_SUPORTADAS = {".md", ".txt", ".pdf", ".docx", ".pptx"}
 
 
 def _ler_pdf(caminho: Path) -> str:
@@ -25,6 +25,27 @@ def _ler_docx(caminho: Path) -> str:
     return "\n".join(paragrafo.text for paragrafo in documento.paragraphs)
 
 
+def _ler_pptx(caminho: Path) -> str:
+    from pptx import Presentation
+
+    apresentacao = Presentation(str(caminho))
+    partes: list[str] = []
+    for numero, slide in enumerate(apresentacao.slides, start=1):
+        textos = [
+            forma.text_frame.text.strip()
+            for forma in slide.shapes
+            if forma.has_text_frame and forma.text_frame.text.strip()
+        ]
+        # Notas do apresentador, quando houver.
+        if slide.has_notes_slide:
+            nota = slide.notes_slide.notes_text_frame.text.strip()
+            if nota:
+                textos.append(f"[Notas do slide] {nota}")
+        if textos:
+            partes.append(f"[Slide {numero}]\n" + "\n".join(textos))
+    return "\n\n".join(partes)
+
+
 def ler_arquivo(caminho: Path) -> str:
     """Lê um único arquivo e devolve seu texto."""
     sufixo = caminho.suffix.lower()
@@ -34,6 +55,8 @@ def ler_arquivo(caminho: Path) -> str:
         return _ler_pdf(caminho)
     if sufixo == ".docx":
         return _ler_docx(caminho)
+    if sufixo == ".pptx":
+        return _ler_pptx(caminho)
     raise ValueError(f"Formato não suportado: {caminho.name}")
 
 

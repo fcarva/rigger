@@ -16,7 +16,7 @@ base_conhecimento/normas/   ─┤──►  Agente (Claude)  ──►  saidas/
 ```
 
 1. **Base de conhecimento** — coloque apostilas, manuais e normas em
-   [`base_conhecimento/`](base_conhecimento/) (`.md`, `.txt`, `.pdf`, `.docx`).
+   [`base_conhecimento/`](base_conhecimento/) (`.md`, `.txt`, `.pdf`, `.docx`, `.pptx`).
 2. **Geração** — o agente lê o material + normas, extrai a estrutura via *structured
    outputs* da Claude e monta o arquivo final.
 3. **Saída** — os arquivos ficam em [`saidas/`](saidas/).
@@ -82,6 +82,8 @@ rigger/
 
 - [x] Treinamento → PPTX
 - [x] Apreciação de risco → Word
+- [x] Ingestão de `.md/.txt/.pdf/.docx/.pptx` (texto)
+- [ ] Leitura por **visão/OCR** de materiais só com imagens (ex.: apostilas escaneadas)
 - [ ] Plano de içamento (rigging plan) e checklist de inspeção de acessórios
 - [ ] Geração de avaliação/prova com gabarito
 - [ ] Importar normas oficiais completas para a base

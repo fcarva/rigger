@@ -14,7 +14,10 @@ base_conhecimento/
 ## Como alimentar
 
 1. **`cursos/`** — jogue aqui as apostilas, slides, manuais e anotações do curso de
-   içamento de carga. Formatos lidos automaticamente: `.md`, `.txt`, `.pdf`, `.docx`.
+   içamento de carga. Formatos lidos automaticamente: `.md`, `.txt`, `.pdf`, `.docx`, `.pptx`.
+
+   > Atenção: PPTX/PDF feitos só de **imagens** (slides escaneados/renderizados) não têm
+   > texto extraível. Nesses casos é preciso OCR ou leitura por visão (ver roadmap).
 2. **`normas/`** — mantenha aqui resumos das normas. O arquivo
    [`normas/icamento_carga.md`](normas/icamento_carga.md) já vem com um índice inicial
    das NRs e ABNT mais relevantes. Expanda-o conforme necessário (cole trechos,
