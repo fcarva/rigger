@@ -30,6 +30,20 @@ Diretrizes:
 quando fizer sentido, mas não extrapole além do que é tecnicamente correto.
 """
 
+# Instrução para transcrever slides (imagens) em texto técnico.
+INSTRUCOES_TRANSCRICAO = """\
+As imagens acima são slides de uma apostila de içamento de carga. Transcreva o \
+conteúdo de cada slide em Markdown técnico, em português do Brasil.
+
+Para cada slide:
+- Use um título de nível 2 (`## Slide N — título do slide`).
+- Reproduza fielmente textos, listas e tabelas (use tabelas Markdown quando houver).
+- Descreva objetivamente figuras, diagramas, fotos e sinais de mão relevantes \
+(ex.: "Diagrama: ângulo de lingada e fator de carga"), sem inventar dados.
+- Não acrescente comentários, opiniões ou conteúdo que não esteja no slide.
+Responda apenas com a transcrição em Markdown.
+"""
+
 # Instrução específica para gerar apreciação de risco.
 INSTRUCOES_APRECIACAO = """\
 Sua tarefa é elaborar uma APRECIAÇÃO DE RISCO (APR) para a atividade de içamento de \

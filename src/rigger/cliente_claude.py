@@ -73,3 +73,33 @@ class ClienteClaude:
                 "Tente reduzir o material, revisar o pedido ou aumentar max_tokens."
             )
         return resposta.parsed_output
+
+    def transcrever_imagens(
+        self,
+        imagens: list[tuple[int, str, str]],
+        instrucao: str,
+        max_tokens: int = 8000,
+    ) -> str:
+        """Transcreve um lote de imagens (slides) em texto usando visão.
+
+        `imagens` é uma lista de tuplas (numero_do_slide, dados_base64, media_type).
+        Devolve o texto transcrito (Markdown).
+        """
+        conteudo: list[dict] = []
+        for numero, dados_b64, media_type in imagens:
+            conteudo.append({"type": "text", "text": f"Slide {numero}:"})
+            conteudo.append(
+                {
+                    "type": "image",
+                    "source": {"type": "base64", "media_type": media_type, "data": dados_b64},
+                }
+            )
+        conteudo.append({"type": "text", "text": instrucao})
+
+        resposta = self._client.messages.create(
+            model=self.config.modelo,
+            max_tokens=max_tokens,
+            system=PERSONA,
+            messages=[{"role": "user", "content": conteudo}],
+        )
+        return "".join(bloco.text for bloco in resposta.content if bloco.type == "text")

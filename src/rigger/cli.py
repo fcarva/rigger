@@ -46,6 +46,28 @@ def treinamento(
 
 
 @app.command()
+def transcrever(
+    material: Path = typer.Option(..., "--material", "-m", help="PPTX de slides em imagem a transcrever."),
+    lote: int = typer.Option(6, "--lote", help="Slides por chamada à API (controla custo/velocidade)."),
+    saida: Optional[Path] = typer.Option(
+        None, "--saida", "-o", help="Caminho do .md de saída. Padrão: ao lado do PPTX."
+    ),
+) -> None:
+    """Transcreve um PPTX de slides-imagem para texto (Markdown) via visão da Claude."""
+    from .visao import transcrever_pptx
+
+    config = Config()
+
+    def _progresso(feitos: int, total: int) -> None:
+        typer.echo(f"  transcrevendo... {feitos}/{total} slides")
+
+    typer.echo(f"Transcrevendo {material.name} (visão da Claude) ...")
+    _, caminho = transcrever_pptx(material, lote=lote, destino=saida, config=config, progresso=_progresso)
+    typer.secho(f"Transcrição salva em: {caminho}", fg=typer.colors.GREEN)
+    typer.echo("Agora gere o treinamento apontando --material para esse arquivo .md.")
+
+
+@app.command()
 def apreciacao(
     atividade: str = typer.Option(..., "--atividade", "-a", help="Atividade a ser analisada."),
     material: Optional[Path] = typer.Option(

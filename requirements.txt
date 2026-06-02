@@ -5,3 +5,4 @@ pydantic>=2.7
 python-dotenv>=1.0
 pypdf>=4.2
 typer>=0.12
+pillow>=10.0
