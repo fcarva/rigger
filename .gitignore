@@ -26,6 +26,12 @@ saidas/*
 base_conhecimento/cursos/*
 !base_conhecimento/cursos/.gitkeep
 
+# Normas: versiona os resumos (.md/.txt) que você escreve, mas mantém locais os
+# PDFs/decks de terceiros (ex.: normas ABNT, que são protegidas/comercializadas).
+base_conhecimento/normas/*.pdf
+base_conhecimento/normas/*.docx
+base_conhecimento/normas/*.pptx
+
 # Sistema operacional
 .DS_Store
 Thumbs.db
